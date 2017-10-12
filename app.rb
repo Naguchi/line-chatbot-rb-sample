@@ -1,5 +1,8 @@
 require 'sinatra'
 require 'line/bot'
+require 'net/http'
+require 'uri'
+require 'json'
 
 get '/' do
     # list users up and display
@@ -18,7 +21,7 @@ get '/test/push' do
     userId = ENV["LINE_TEST_USER_ID"]
     message = {
         type: 'text',
-        text: 'push message!!!!!!!!!!!'
+        text: '†悔い改めて†'
     }
     response = client.push_message(userId, message)
     p "#{response.code} #{response.body}"
@@ -69,9 +72,20 @@ post '/callback' do
         tf.write(response.body)
       end
     when Line::Bot::Event::Follow
+        uri = URI.parse('http://http://183.181.14.111/beast/api/?w=' + event.message['text'])
+        json = Net::HTTP.get(uri)
+        result = JSON.parse(json)
+        # puts result
+        # puts "id: " + result['id'].to_s
+        # puts "name: " + result['name'].to_s
+        # result['friends'].each_with_index { | friend, index |
+        #   puts "friend#{ index + 1 }: #{ friend }"
+        # }
+
+
         message = [{
           type: 'text',
-          text: '追加してくれてありがと！'
+          text: result['value']
         },
         {
           type: 'text',
