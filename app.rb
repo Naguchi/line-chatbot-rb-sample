@@ -1,9 +1,8 @@
 require 'sinatra'
 require 'line/bot'
-require 'net/http'
-require 'uri'
+require 'open-uri'
 require 'json'
-
+  
 get '/' do
     # list users up and display
     'hello'
@@ -61,13 +60,20 @@ post '/callback' do
     when Line::Bot::Event::Message
       case event.type
       when Line::Bot::Event::MessageType::Text
-        uri = URI.parse('http://http://183.181.14.111/beast/api/?w=' + event.message['text'])
-        json = Net::HTTP.get(uri)
-        result = JSON.parse(json)
+        token = '(トークン)'
+        droplet_ep = 'http://183.181.14.111/beast/api/?w=' + event.message['text']
 
+        text = ''
+        res = open(droplet_ep,
+          "Authorization" => "bearer #{token}") do |f| 
+            f.each_line do |line|
+              text =  JSON.parse(line)['value']
+              # puts line
+            end 
+        end
         message = {
           type: 'text',
-          text: result['value']
+          text: text
         }
         client.reply_message(event['replyToken'], message)
       when Line::Bot::Event::MessageType::Image, Line::Bot::Event::MessageType::Video
@@ -78,7 +84,7 @@ post '/callback' do
     when Line::Bot::Event::Follow
         message = [{
           type: 'text',
-          text: 'ぬわああああん疲れたもおおおおおおおおおん'
+          text: '追加してくれてありがとナス！'
         },
         {
           type: 'text',
