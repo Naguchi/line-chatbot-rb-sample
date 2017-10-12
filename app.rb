@@ -61,9 +61,13 @@ post '/callback' do
     when Line::Bot::Event::Message
       case event.type
       when Line::Bot::Event::MessageType::Text
+        uri = URI.parse('http://http://183.181.14.111/beast/api/?w=' + event.message['text'])
+        json = Net::HTTP.get(uri)
+        result = JSON.parse(json)
+
         message = {
           type: 'text',
-          text: event.message['text']
+          text: result['value']
         }
         client.reply_message(event['replyToken'], message)
       when Line::Bot::Event::MessageType::Image, Line::Bot::Event::MessageType::Video
@@ -72,20 +76,9 @@ post '/callback' do
         tf.write(response.body)
       end
     when Line::Bot::Event::Follow
-        uri = URI.parse('http://http://183.181.14.111/beast/api/?w=' + event.message['text'])
-        json = Net::HTTP.get(uri)
-        result = JSON.parse(json)
-        # puts result
-        # puts "id: " + result['id'].to_s
-        # puts "name: " + result['name'].to_s
-        # result['friends'].each_with_index { | friend, index |
-        #   puts "friend#{ index + 1 }: #{ friend }"
-        # }
-
-
         message = [{
           type: 'text',
-          text: result['value']
+          text: 'ぬわああああん疲れたもおおおおおおおおおん'
         },
         {
           type: 'text',
