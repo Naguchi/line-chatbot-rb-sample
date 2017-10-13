@@ -61,7 +61,7 @@ post '/callback' do
       case event.type
       when Line::Bot::Event::MessageType::Text
         token = '(トークン)'
-        droplet_ep = 'http://183.181.14.111/beast/api/?w=' + event.message['text']
+        droplet_ep = 'http://183.181.14.111/beast/api/?w=a'
 
         text = ''
         res = open(droplet_ep,
